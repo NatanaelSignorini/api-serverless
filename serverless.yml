@@ -1,0 +1,28 @@
+service: api-serverless
+
+plugins:
+  - serverless-plugin-typescript
+  # - serverless-esbuild # used for compiling/packaging the Typescript code
+  - serverless-offline # used for local execution
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage}
+  timeout: 30   # repository wide Lambda timeout
+  environment:  # repository wide Lambda env variables
+    STAGE: ${self:provider.stage}
+
+
+functions:
+  # Serverless Framework specific syntax
+  agenda:
+    handler: ./src/agenda/controller.handler
+    events:
+      - http:
+          path: /api/agenda
+          method: GET
+    
+
+ 
